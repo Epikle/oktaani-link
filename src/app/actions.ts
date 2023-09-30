@@ -21,3 +21,12 @@ export const updateProfile = async (userId: string, values: FormValues) => {
   revalidatePath("/");
   revalidatePath("/view");
 };
+
+export const getUserData = async (id: string) => {
+  const data = await db.user.findUnique({
+    where: { id },
+    include: { links: true },
+  });
+
+  return data;
+};

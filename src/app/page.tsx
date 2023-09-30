@@ -5,20 +5,12 @@ import { Link as LinkIcon } from "lucide-react";
 import LinkForm from "@/components/LinkForm";
 import TestLogout from "@/components/TestLogout";
 import { getAuthSession } from "@/lib/auth";
-import { db } from "@/lib/db";
+import { getUserData } from "./actions";
 
 export const metadata: Metadata = {
-  title: "Homepage",
-  description: "hello",
-};
-
-export const getUserData = async (id: string) => {
-  const data = await db.user.findUnique({
-    where: { id },
-    include: { links: true },
-  });
-
-  return data;
+  title: "Customize your profile | oktaaniLINK",
+  description:
+    "Add/edit/remove links below and then share your profile with the world!",
 };
 
 export default async function Home() {
