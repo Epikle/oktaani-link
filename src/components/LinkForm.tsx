@@ -4,7 +4,8 @@ import React from "react";
 import { z } from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Platform, Prisma } from "@prisma/client";
+import { Platform, Prisma, Visibility } from "@prisma/client";
+import { Eye, EyeOff, Lock, Newspaper, UserCircle2 } from "lucide-react";
 
 import * as F from "./ui/Form";
 import { Button } from "./ui/Button";
@@ -16,15 +17,15 @@ import { updateProfile } from "@/app/actions";
 import { useToast } from "@/components/ui/useToast";
 import { PlatformData } from "./Platforms";
 import { Input } from "./ui/Input";
-import { Newspaper, UserCircle2 } from "lucide-react";
+import * as S from "./ui/Select";
 
 export const PlatformType = z.nativeEnum(Platform);
-
 export type Data = Prisma.PromiseReturnType<typeof getUserData>;
-
+export type FormValues = z.infer<typeof formSchema>;
 const formSchema = z.object({
   displayName: z.string(),
   description: z.string(),
+  visibility: z.nativeEnum(Visibility),
   links: z
     .object({
       platform: PlatformType,
@@ -33,43 +34,22 @@ const formSchema = z.object({
     .array(),
 });
 
-export type FormValues = z.infer<typeof formSchema>;
-
 const LinkForm: React.FC<{
   data: Data;
 }> = ({ data }) => {
-  let defaultValues: FormValues = {
-    displayName: "",
-    description: "",
-    links: [
-      {
-        platform: "GitHub",
-        username: "",
-      },
-    ],
-  };
-
-  if (data) {
-    if (data.links.length > 0) {
-      const links = data.links.map((link) => ({
-        platform: link.platform,
-        username: link.username,
-      }));
-      defaultValues = {
-        ...defaultValues,
-        links,
-      };
-    }
-    defaultValues = {
-      ...defaultValues,
-      displayName: data.displayName ?? "",
-      description: data.description ?? "",
-    };
-  }
   const { toast } = useToast();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: {
+      displayName: data?.displayName ?? "",
+      description: data?.description ?? "",
+      visibility: data?.visibility ?? "Private",
+      links:
+        data?.links.map((link) => ({
+          platform: link.platform,
+          username: link.username,
+        })) ?? [],
+    },
   });
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -78,13 +58,9 @@ const LinkForm: React.FC<{
 
   const onSubmit = async (values: FormValues) => {
     if (!data?.id) return;
-
     await updateProfile(data.id, values);
-
     form.reset({}, { keepValues: true });
-    toast({
-      title: "Saved",
-    });
+    toast({ title: "Saved" });
   };
 
   return (
@@ -112,7 +88,7 @@ const LinkForm: React.FC<{
               <h4 className="text-xl font-semibold tracking-tight">General</h4>
               <F.FormField
                 control={form.control}
-                name={`displayName`}
+                name="displayName"
                 render={({ field }) => (
                   <F.FormItem className="flex-grow">
                     <F.FormLabel className="text-sm">
@@ -139,7 +115,7 @@ const LinkForm: React.FC<{
 
               <F.FormField
                 control={form.control}
-                name={`description`}
+                name="description"
                 render={({ field }) => (
                   <F.FormItem className="flex-grow">
                     <F.FormLabel className="text-sm">
@@ -158,6 +134,49 @@ const LinkForm: React.FC<{
                         />
                         <Newspaper className="absolute left-3 top-1/2 -translate-y-1/2" />
                       </div>
+                    </F.FormControl>
+                    <F.FormMessage />
+                  </F.FormItem>
+                )}
+              />
+
+              <F.FormField
+                control={form.control}
+                name="visibility"
+                render={({ field }) => (
+                  <F.FormItem className="flex-grow">
+                    <F.FormLabel className="text-sm">
+                      Profile Visibility
+                    </F.FormLabel>
+                    <F.FormControl>
+                      <S.Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <S.SelectTrigger className="w-full">
+                          <S.SelectValue placeholder="Visibility" />
+                        </S.SelectTrigger>
+                        <S.SelectContent>
+                          <S.SelectItem value="Private">
+                            <span className="flex items-center gap-2">
+                              <Lock />
+                              Private
+                            </span>
+                          </S.SelectItem>
+                          <S.SelectItem value="Unlisted">
+                            <span className="flex items-center gap-2">
+                              <EyeOff />
+                              Unlisted
+                            </span>
+                          </S.SelectItem>
+                          <S.SelectItem value="Public">
+                            <span className="flex items-center gap-2">
+                              <Eye />
+                              Public
+                            </span>
+                          </S.SelectItem>
+                        </S.SelectContent>
+                      </S.Select>
                     </F.FormControl>
                     <F.FormMessage />
                   </F.FormItem>

@@ -82,7 +82,7 @@ const Preview: FC<PreviewProps> = ({ control, data }) => {
           <input
             readOnly
             type="text"
-            defaultValue={window.location.href + viewUrl}
+            defaultValue={global.window && window.location.href + viewUrl}
             onClick={(e) => e.currentTarget.select()}
             className="leading-8 outline-none"
           />
