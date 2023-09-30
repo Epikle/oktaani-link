@@ -2,10 +2,10 @@ import { FC } from "react";
 import Link from "next/link";
 import { LinkIcon } from "lucide-react";
 
-import ProfileLogout from "./ProfileLogout";
 import { getAuthSession } from "@/lib/auth";
 import { getUserData } from "@/app/actions";
 import { Data } from "./LinkForm";
+import UserProfile from "./UserProfile";
 
 const Header: FC = async ({}) => {
   const session = await getAuthSession();
@@ -42,7 +42,7 @@ const Header: FC = async ({}) => {
         </nav>
       </div>
 
-      <ProfileLogout user={user} />
+      <UserProfile user={user} />
     </header>
   );
 };

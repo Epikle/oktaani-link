@@ -2,16 +2,17 @@
 
 import { FC } from "react";
 import { signOut } from "next-auth/react";
+import { LogOut, Trash } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import * as D from "@/components/ui/DropdownMenu";
 import { Data } from "./LinkForm";
 
-interface ProfileLogout {
+interface UserProfile {
   user: Data;
 }
 
-const ProfileLogout: FC<ProfileLogout> = ({ user }) => {
+const UserProfile: FC<UserProfile> = ({ user }) => {
   if (!user) return null;
 
   return (
@@ -35,8 +36,18 @@ const ProfileLogout: FC<ProfileLogout> = ({ user }) => {
             </div>
           </D.DropdownMenuLabel>
           <D.DropdownMenuSeparator />
-          <D.DropdownMenuItem asChild onClick={async () => await signOut()}>
-            <span className="cursor-pointer">Log out</span>
+          <D.DropdownMenuItem
+            onClick={() => console.log("delete...")}
+            className="flex cursor-pointer gap-2 bg-destructive/30"
+          >
+            <Trash /> Delete Profile
+          </D.DropdownMenuItem>
+          <D.DropdownMenuSeparator />
+          <D.DropdownMenuItem
+            onClick={async () => await signOut()}
+            className="flex cursor-pointer gap-2"
+          >
+            <LogOut /> Log out
           </D.DropdownMenuItem>
         </D.DropdownMenuContent>
       </D.DropdownMenu>
@@ -44,4 +55,4 @@ const ProfileLogout: FC<ProfileLogout> = ({ user }) => {
   );
 };
 
-export default ProfileLogout;
+export default UserProfile;
