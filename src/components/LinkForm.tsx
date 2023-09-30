@@ -11,12 +11,13 @@ import * as F from "./ui/Form";
 import { Button } from "./ui/Button";
 import LinkItem from "./LinkItem";
 import * as C from "@/components/ui/Card";
-import Preview from "./Preview";
 import { getUserData, updateProfile } from "@/app/actions";
 import { useToast } from "@/components/ui/useToast";
 import { PlatformData } from "./Platforms";
 import { Input } from "./ui/Input";
 import * as S from "./ui/Select";
+import ProfileCard from "./ProfileCard";
+import PreviewControls from "./PreviewControls";
 
 export const PlatformType = z.nativeEnum(Platform);
 export type Data = Prisma.PromiseReturnType<typeof getUserData>;
@@ -62,11 +63,18 @@ const LinkForm: React.FC<{
     toast({ title: "Saved" });
   };
 
+  if (!data) return null;
+
   return (
     <div className="grid grid-cols-2 gap-4">
       <C.Card className="grid place-items-center p-8">
         <C.CardContent>
-          <Preview control={form.control} data={data} />
+          <div className="grid  gap-4">
+            <ProfileCard
+              profileData={{ ...form.watch(), image: data?.image }}
+            />
+            <PreviewControls id={data.id} />
+          </div>
         </C.CardContent>
       </C.Card>
 
@@ -90,7 +98,7 @@ const LinkForm: React.FC<{
                 name="displayName"
                 render={({ field }) => (
                   <F.FormItem className="flex-grow">
-                    <F.FormLabel className="text-sm">
+                    <F.FormLabel className="text-sm" htmlFor={field.name}>
                       Display Name{" "}
                       <span className="text-xs text-muted-foreground">
                         {field.value.length}/50
@@ -103,6 +111,7 @@ const LinkForm: React.FC<{
                           placeholder="Display Name"
                           className="pl-11"
                           maxLength={50}
+                          id={field.name}
                         />
                         <UserCircle2 className="absolute left-3 top-1/2 -translate-y-1/2" />
                       </div>
@@ -117,7 +126,7 @@ const LinkForm: React.FC<{
                 name="description"
                 render={({ field }) => (
                   <F.FormItem className="flex-grow">
-                    <F.FormLabel className="text-sm">
+                    <F.FormLabel className="text-sm" htmlFor={field.name}>
                       Description{" "}
                       <span className="text-xs text-muted-foreground">
                         {field.value.length}/100
@@ -130,6 +139,7 @@ const LinkForm: React.FC<{
                           placeholder="Description"
                           className="pl-11"
                           maxLength={100}
+                          id={field.name}
                         />
                         <Newspaper className="absolute left-3 top-1/2 -translate-y-1/2" />
                       </div>
@@ -146,37 +156,38 @@ const LinkForm: React.FC<{
                   <F.FormItem className="flex-grow">
                     <F.FormLabel className="text-sm">
                       Profile Visibility
+                      <F.FormControl>
+                        <S.Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          name={field.name}
+                        >
+                          <S.SelectTrigger className="mt-2 w-full">
+                            <S.SelectValue placeholder="Visibility" />
+                          </S.SelectTrigger>
+                          <S.SelectContent>
+                            <S.SelectItem value="Private">
+                              <span className="flex items-center gap-2">
+                                <Lock />
+                                Private
+                              </span>
+                            </S.SelectItem>
+                            <S.SelectItem value="Unlisted">
+                              <span className="flex items-center gap-2">
+                                <EyeOff />
+                                Unlisted
+                              </span>
+                            </S.SelectItem>
+                            <S.SelectItem value="Public">
+                              <span className="flex items-center gap-2">
+                                <Eye />
+                                Public
+                              </span>
+                            </S.SelectItem>
+                          </S.SelectContent>
+                        </S.Select>
+                      </F.FormControl>
                     </F.FormLabel>
-                    <F.FormControl>
-                      <S.Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <S.SelectTrigger className="w-full">
-                          <S.SelectValue placeholder="Visibility" />
-                        </S.SelectTrigger>
-                        <S.SelectContent>
-                          <S.SelectItem value="Private">
-                            <span className="flex items-center gap-2">
-                              <Lock />
-                              Private
-                            </span>
-                          </S.SelectItem>
-                          <S.SelectItem value="Unlisted">
-                            <span className="flex items-center gap-2">
-                              <EyeOff />
-                              Unlisted
-                            </span>
-                          </S.SelectItem>
-                          <S.SelectItem value="Public">
-                            <span className="flex items-center gap-2">
-                              <Eye />
-                              Public
-                            </span>
-                          </S.SelectItem>
-                        </S.SelectContent>
-                      </S.Select>
-                    </F.FormControl>
                     <F.FormMessage />
                   </F.FormItem>
                 )}

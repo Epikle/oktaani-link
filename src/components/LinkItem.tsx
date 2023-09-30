@@ -34,27 +34,32 @@ const LinkItem: React.FC<LinkItemProps> = ({ index, onRemove, control }) => {
           name={`links.${index}.platform`}
           render={({ field }) => (
             <F.FormItem className="flex-grow">
-              <F.FormLabel className="text-sm">Platform</F.FormLabel>
-              <F.FormControl>
-                <S.Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <S.SelectTrigger className="w-full">
-                    <S.SelectValue placeholder="Platform" />
-                  </S.SelectTrigger>
-                  <S.SelectContent>
-                    {Object.entries(PlatformData).map(([itemtype, values]) => (
-                      <S.SelectItem key={itemtype} value={itemtype}>
-                        <span className="flex items-center gap-2">
-                          {values.icon}
-                          {itemtype}
-                        </span>
-                      </S.SelectItem>
-                    ))}
-                  </S.SelectContent>
-                </S.Select>
-              </F.FormControl>
+              <F.FormLabel className="text-sm">
+                Platform
+                <F.FormControl>
+                  <S.Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    name={field.name}
+                  >
+                    <S.SelectTrigger className="mt-2 w-full">
+                      <S.SelectValue placeholder="Platform" />
+                    </S.SelectTrigger>
+                    <S.SelectContent>
+                      {Object.entries(PlatformData).map(
+                        ([itemtype, values]) => (
+                          <S.SelectItem key={itemtype} value={itemtype}>
+                            <span className="flex items-center gap-2">
+                              {values.icon}
+                              {itemtype}
+                            </span>
+                          </S.SelectItem>
+                        ),
+                      )}
+                    </S.SelectContent>
+                  </S.Select>
+                </F.FormControl>
+              </F.FormLabel>
               <F.FormMessage />
             </F.FormItem>
           )}
@@ -65,10 +70,17 @@ const LinkItem: React.FC<LinkItemProps> = ({ index, onRemove, control }) => {
           name={`links.${index}.username`}
           render={({ field }) => (
             <F.FormItem className="flex-grow">
-              <F.FormLabel className="text-sm">Username</F.FormLabel>
+              <F.FormLabel className="text-sm" htmlFor={field.name}>
+                Username
+              </F.FormLabel>
               <F.FormControl>
                 <div className="relative">
-                  <Input {...field} placeholder="Username" className="pl-11" />
+                  <Input
+                    {...field}
+                    placeholder="Username"
+                    className="pl-11"
+                    id={field.name}
+                  />
                   <UserCircle2 className="absolute left-3 top-1/2 -translate-y-1/2" />
                 </div>
               </F.FormControl>
