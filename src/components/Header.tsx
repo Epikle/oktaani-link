@@ -2,9 +2,27 @@ import { FC } from "react";
 import Link from "next/link";
 import { LinkIcon } from "lucide-react";
 
-const Header: FC = ({}) => {
+import ProfileLogout from "./ProfileLogout";
+import { getAuthSession } from "@/lib/auth";
+import { getUserData } from "@/app/actions";
+import { Data } from "./LinkForm";
+
+const Header: FC = async ({}) => {
+  const session = await getAuthSession();
+  let user: Data = null;
+
+  if (session) {
+    try {
+      user = await getUserData(session.user.id);
+    } catch (error) {
+      return <p>Error</p>;
+    }
+  }
+
+  if (!user) return null;
+
   return (
-    <header className="flex items-center justify-between border-b-2 bg-gray-100 px-4 py-2">
+    <header className="flex items-center justify-between border-b-2 bg-white/50 px-4 py-2">
       <div className="flex items-center gap-8">
         <Link
           href="/"
@@ -15,21 +33,16 @@ const Header: FC = ({}) => {
             oktaani<span className="font-extrabold">LINK</span>
           </span>
         </Link>
-        <ul>
-          <Link href="/view" className="hover:underline">
-            <li>Explore Profiles</li>
-          </Link>
-        </ul>
+        <nav>
+          <ul>
+            <Link href="/view" className="hover:underline">
+              <li>Explore Profiles</li>
+            </Link>
+          </ul>
+        </nav>
       </div>
-      <nav>
-        {/* {session && (
-      <TestLogout
-        name={session.user.name}
-        imgUrl={session.user.image}
-        email={session.user.email}
-      />
-    )} */}
-      </nav>
+
+      <ProfileLogout user={user} />
     </header>
   );
 };

@@ -71,7 +71,10 @@ const LinkItem: React.FC<LinkItemProps> = ({ index, onRemove, control }) => {
           render={({ field }) => (
             <F.FormItem className="flex-grow">
               <F.FormLabel className="text-sm" htmlFor={field.name}>
-                Username
+                Username{" "}
+                <span className="text-xs text-muted-foreground">
+                  {field.value.length}/50
+                </span>
               </F.FormLabel>
               <F.FormControl>
                 <div className="relative">
@@ -80,6 +83,7 @@ const LinkItem: React.FC<LinkItemProps> = ({ index, onRemove, control }) => {
                     placeholder="Username"
                     className="pl-11"
                     id={field.name}
+                    maxLength={50}
                   />
                   <UserCircle2 className="absolute left-3 top-1/2 -translate-y-1/2" />
                 </div>

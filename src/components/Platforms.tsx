@@ -17,7 +17,7 @@ export const PlatformData: Record<
   },
   Instagram: {
     icon: <Instagram />,
-    url:'https://www.instagram.com/',
-    color: "bg-[#5B51D8]"
-  }
+    url: "https://www.instagram.com/",
+    color: "bg-[#5B51D8]",
+  },
 };

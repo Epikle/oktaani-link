@@ -1,21 +1,22 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { signIn } from 'next-auth/react';
-import { cn } from '@/lib/utils';
-import { Icons } from '@/components/ui/Icons';
-import { Button } from '@/components/ui/Button';
+import React from "react";
+import { signIn } from "next-auth/react";
+
+import { Icons } from "@/components/ui/Icons";
+import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  async function loginBtnHandler(event: React.SyntheticEvent) {
+  async function loginBtnHandler() {
     setIsLoading(true);
 
     try {
-      await signIn('github');
+      await signIn("github");
     } catch (error) {
       console.error(error);
     } finally {
@@ -24,7 +25,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className={cn("grid gap-6", className)} {...props}>
       <Button
         variant="outline"
         type="button"
@@ -35,7 +36,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{' '}
+        )}{" "}
         Github
       </Button>
     </div>

@@ -67,9 +67,9 @@ const LinkForm: React.FC<{
 
   return (
     <div className="grid grid-cols-2 gap-4">
-      <C.Card className="grid place-items-center p-8">
+      <C.Card className="grid justify-center bg-white/50 p-8">
         <C.CardContent>
-          <div className="grid  gap-4">
+          <div className="grid gap-4">
             <ProfileCard
               profileData={{ ...form.watch(), image: data?.image }}
             />
@@ -78,7 +78,7 @@ const LinkForm: React.FC<{
         </C.CardContent>
       </C.Card>
 
-      <C.Card className="py-4">
+      <C.Card className="bg-white/50 py-4">
         <C.CardContent>
           <h3 className="text-2xl font-semibold tracking-tight">
             Customize your profile
