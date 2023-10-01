@@ -58,7 +58,7 @@ const LinkForm: React.FC<{
 
   const onSubmit = async (values: FormValues) => {
     if (!data?.id) return;
-    await updateProfile(data.id, values);
+    await updateProfile(values);
     form.reset({}, { keepValues: true });
     toast({ title: "Saved" });
   };
@@ -66,33 +66,37 @@ const LinkForm: React.FC<{
   if (!data) return null;
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <C.Card className="grid justify-center bg-white/50 p-8">
+    <div className="grid gap-4 md:grid-cols-2">
+      <C.Card className="grid justify-center bg-white/50 p-8 pt-4">
         <C.CardContent>
           <div className="grid gap-4">
-            <ProfileCard
-              profileData={{ ...form.watch(), image: data?.image }}
-            />
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight">Preview</h2>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Preview your profile card.
+              </p>
+            </div>
+            <div className="grid place-content-center">
+              <ProfileCard
+                profileData={{ ...form.watch(), image: data?.image }}
+              />
+            </div>
             <PreviewControls id={data.id} />
           </div>
         </C.CardContent>
       </C.Card>
 
       <C.Card className="bg-white/50 py-4">
-        <C.CardContent>
-          <h3 className="text-2xl font-semibold tracking-tight">
-            Customize your profile
-          </h3>
+        <C.CardContent className="pb-0">
+          <h2 className="text-2xl font-semibold tracking-tight">General</h2>
           <p className="mb-4 text-sm text-muted-foreground">
-            Add/edit/remove links below and then share your profile with the
-            world!
+            Explore your general settings for customization and control.
           </p>
           <F.Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="my-4 flex flex-col gap-4"
             >
-              <h4 className="text-xl font-semibold tracking-tight">General</h4>
               <F.FormField
                 control={form.control}
                 name="displayName"
@@ -193,7 +197,13 @@ const LinkForm: React.FC<{
                 )}
               />
 
-              <h4 className="text-xl font-semibold tracking-tight">Links</h4>
+              <div>
+                <h2 className="text-2xl font-semibold tracking-tight">Links</h2>
+                <p className="text-sm text-muted-foreground">
+                  Manage your social media profile links.
+                </p>
+              </div>
+
               <Button
                 type="button"
                 className="w-full"

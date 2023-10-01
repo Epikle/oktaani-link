@@ -7,6 +7,7 @@ import { LogOut, Trash } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import * as D from "@/components/ui/DropdownMenu";
 import { Data } from "./LinkForm";
+import { deleteUserData } from "@/app/actions";
 
 interface UserProfile {
   user: Data;
@@ -37,7 +38,7 @@ const UserProfile: FC<UserProfile> = ({ user }) => {
           </D.DropdownMenuLabel>
           <D.DropdownMenuSeparator />
           <D.DropdownMenuItem
-            onClick={() => console.log("delete...")}
+            onClick={async () => await deleteUserData()}
             className="flex cursor-pointer gap-2 bg-destructive/30"
           >
             <Trash /> Delete Profile
