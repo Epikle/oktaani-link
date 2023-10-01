@@ -63,7 +63,7 @@ model Link {
   id       String   @id @default(cuid())
   platform Platform
   username String
-  user     User     @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   String
 }
 
