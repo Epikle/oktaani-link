@@ -1,12 +1,12 @@
-import { db } from '@/lib/db';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { NextAuthOptions, getServerSession } from 'next-auth';
-import GithubProvider from 'next-auth/providers/github';
+import { db } from "@/lib/db";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { NextAuthOptions, getServerSession } from "next-auth";
+import GithubProvider from "next-auth/providers/github";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   providers: [
     GithubProvider({
@@ -16,12 +16,14 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async session({ session, token }) {
-      session.user.id = token.sub;
+      if (token.sub) {
+        session.user.id = token.sub;
+      }
 
       return session;
     },
     redirect() {
-      return '/';
+      return "/";
     },
   },
 };
