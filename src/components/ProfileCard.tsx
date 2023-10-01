@@ -7,6 +7,7 @@ import { PlatformData } from "./Platforms";
 import { buttonVariants } from "./ui/Button";
 import { FormValues } from "./LinkForm";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 type Nullable<T> = { [K in keyof T]: T[K] | null };
 
@@ -19,7 +20,17 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileData }) => {
     <Card className="relative isolate w-[250px] overflow-hidden shadow-md">
       <CardContent className="flex h-full flex-col gap-2 pt-6">
         <div className="flex flex-grow flex-col items-center">
-          <div className="absolute inset-0 -z-10 h-[50px] bg-gray-200" />
+          <div className="absolute inset-0 -z-10 h-[50px] overflow-hidden bg-gray-200">
+            {profileData.image && (
+              <Image
+                src={profileData.image}
+                alt="test"
+                width={250}
+                height={250}
+                className="blur-xl"
+              />
+            )}
+          </div>
           <Avatar className="mx-auto -mt-2 h-24 w-24 border-4 border-white">
             <AvatarImage
               src={profileData.image || undefined}

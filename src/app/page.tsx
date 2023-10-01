@@ -26,6 +26,12 @@ export default async function Home() {
 
   return (
     <div className="container mt-4 text-primary">
+      <h1 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+        Customize your profile
+      </h1>
+      <p className="mb-4 mt-2 text-sm text-muted-foreground">
+        Add/edit/remove links below and then share your profile with the world!
+      </p>
       <LinkForm data={user} />
     </div>
   );

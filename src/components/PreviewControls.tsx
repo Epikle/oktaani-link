@@ -21,7 +21,7 @@ const PreviewControls: FC<PreviewControlsProps> = ({ id }) => {
   };
 
   return (
-    <Card>
+    <Card className="shadow-md">
       <CardContent className="grid gap-2 p-2 text-xs">
         <input
           readOnly
