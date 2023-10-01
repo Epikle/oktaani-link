@@ -1,46 +1,43 @@
-import { PlatformData } from "@/components/Platforms";
-import { buttonVariants } from "@/components/ui/Button";
-import { db } from "@/lib/db";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { FC } from "react";
+import { Metadata } from "next";
+
+import ProfileCard from "@/components/ProfileCard";
+import { getProfileData } from "./actions";
+
+export const metadata: Metadata = {
+  title: "View Profile | oktaaniLINK",
+  description: "View your profile",
+};
 
 interface PageProps {
   params: { pid: string };
 }
 
 const Page: FC<PageProps> = async ({ params }) => {
-  const profile = await db.user.findUnique({
-    where: {
-      id: params.pid,
-      OR: [{ visibility: "Public" }, { visibility: "Unlisted" }],
-    },
-    include: {
-      links: true,
-    },
-  });
+  const profile = await getProfileData(params.pid);
 
-  if (!profile) return <p>Not Found!</p>;
+  if (!profile)
+    return (
+      <div className="container mt-4 text-primary">
+        <h1 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+          View Profile
+        </h1>
+        <p>Not Found!</p>
+      </div>
+    );
 
   return (
-    <ul className="container mt-8 grid w-full gap-2">
-      {profile.links.map((link, index) => (
-        <li key={index}>
-          {link.platform && (
-            <Link
-              href={PlatformData[link.platform].url + link.username}
-              className={cn(
-                buttonVariants({ variant: "default" }),
-                "flex items-center justify-start gap-2 ",
-                PlatformData[link.platform].color,
-              )}
-            >
-              {PlatformData[link.platform].icon} {link.username}
-            </Link>
-          )}
-        </li>
-      ))}
-    </ul>
+    <div className="container mt-4 text-primary">
+      <h1 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+        View Profile
+      </h1>
+      <p className="mb-4 mt-2 text-sm text-muted-foreground">
+        Viewing profile {profile.displayName}
+      </p>
+      <div className="container mt-8 flex justify-center gap-4">
+        <ProfileCard key={profile.id} profileData={profile} />
+      </div>
+    </div>
   );
 };
 
