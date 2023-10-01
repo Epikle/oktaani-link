@@ -42,6 +42,8 @@ const PreviewControls: FC<PreviewControlsProps> = ({ id }) => {
           </Button>
           <Link
             href={viewUrl}
+            rel="noopener noreferrer"
+            target="_blank"
             className={cn(
               buttonVariants({ variant: "default" }),
               "flex gap-2 text-xs",

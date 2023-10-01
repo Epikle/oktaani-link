@@ -59,6 +59,8 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileData }) => {
                   {link.platform && (
                     <Link
                       href={PlatformData[link.platform].url + link.username}
+                      rel="noopener noreferrer"
+                      target="_blank"
                       className={cn(
                         buttonVariants({ variant: "default" }),
                         "flex items-center justify-start gap-2",

@@ -18,7 +18,7 @@ const Page: FC = async () => {
         <h1 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
           Explore Profiles
         </h1>
-        <p>Not Found!</p>
+        <p>No profiles to explore!</p>
       </div>
     );
 
