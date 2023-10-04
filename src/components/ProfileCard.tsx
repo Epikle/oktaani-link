@@ -1,13 +1,13 @@
 import { FC } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 import { Card, CardContent } from "./ui/Card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/Avatar";
 import { PlatformData } from "./Platforms";
 import { buttonVariants } from "./ui/Button";
 import { FormValues } from "./LinkForm";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { cn, filterBadWords } from "@/lib/utils";
 
 type Nullable<T> = { [K in keyof T]: T[K] | null };
 
@@ -16,6 +16,11 @@ interface ProfileCardProps {
 }
 
 const ProfileCard: FC<ProfileCardProps> = ({ profileData }) => {
+  const displayName = filterBadWords(profileData.displayName || "Anonymous");
+  const description = filterBadWords(
+    profileData.description || "No description.",
+  );
+
   return (
     <Card className="relative isolate w-[250px] overflow-hidden shadow-md">
       <CardContent className="flex h-full flex-col gap-2 pt-6">
@@ -24,7 +29,7 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileData }) => {
             {profileData.image && (
               <Image
                 src={profileData.image}
-                alt="test"
+                alt="Profile image"
                 width={250}
                 height={250}
                 className="blur-xl"
@@ -34,20 +39,18 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileData }) => {
           <Avatar className="mx-auto -mt-2 h-24 w-24 border-4 border-white">
             <AvatarImage
               src={profileData.image || undefined}
-              alt={profileData.displayName || "Anonymous"}
+              alt={displayName}
             />
             <AvatarFallback>
-              {(profileData.displayName || "Anonymous")
-                .slice(0, 2)
-                .toUpperCase()}
+              {displayName.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
 
           <h4 className="mt-2 w-full break-words text-center text-xl font-semibold tracking-tight">
-            {profileData.displayName?.trim() || "Anonymous"}
+            {displayName}
           </h4>
           <p className="mb-8 mt-2 w-full break-words text-center text-sm text-muted-foreground">
-            {profileData.description?.trim() || "No description."}
+            {description}
           </p>
         </div>
         {profileData.links && profileData.links.length > 0 && (
