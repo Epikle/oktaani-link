@@ -1,11 +1,13 @@
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_PRISMA_URL") // uses connection pooling
-  directUrl = env("DATABASE_URL_NON_POOLING") // uses a direct connection
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  schemas   = ["link"]
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 model Account {
@@ -25,6 +27,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@schema("link")
 }
 
 model Session {
@@ -33,6 +36,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("link")
 }
 
 model User {
@@ -50,6 +55,8 @@ model User {
   links         Link[]
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
+
+  @@schema("link")
 }
 
 model VerificationToken {
@@ -58,6 +65,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@schema("link")
 }
 
 model Link {
@@ -66,21 +74,29 @@ model Link {
   username String
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   String
+
+  @@schema("link")
 }
 
 enum Visibility {
   Public
   Unlisted
   Private
+
+  @@schema("link")
 }
 
 enum Platform {
   GitHub
   YouTube
   Instagram
+
+  @@schema("link")
 }
 
 enum Role {
   User
   Admin
+
+  @@schema("link")
 }
